@@ -2,7 +2,7 @@ streamlit
 langchain-openai
 langchain-core
 weaviate-client
-duckduckgo-search
+ddgs
 python-dotenv
 pypdf
 requests
