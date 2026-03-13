@@ -3,18 +3,31 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
+def _get(key: str, default: str = "") -> str:
+    """Read from env first, then Streamlit secrets (for Cloud deployment)."""
+    val = os.getenv(key, "")
+    if val:
+        return val
+    try:
+        import streamlit as st
+        return st.secrets.get(key, default)
+    except Exception:
+        return default
+
+
 # ── OpenRouter ─────────────────────────────────────────────────────────────
-OPENROUTER_API_KEY  = os.getenv("OPENROUTER_API_KEY", "")
-OPENROUTER_MODEL    = os.getenv("OPENROUTER_MODEL", "openai/gpt-5.2")
+OPENROUTER_API_KEY  = _get("OPENROUTER_API_KEY")
+OPENROUTER_MODEL    = _get("OPENROUTER_MODEL") or "nvidia/nemotron-3-super-120b-a12b"
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
 
 # Vision model used for image damage analysis (must support vision input)
-VISION_MODEL = os.getenv("VISION_MODEL", "qwen/qwen2.5-vl-72b-instruct")
+VISION_MODEL = _get("VISION_MODEL") or "qwen/qwen2.5-vl-72b-instruct"
 
 # ── Weaviate (pre-existing vector DB with equipment manuals) ────────────────
-WEAVIATE_URL        = os.getenv("WEAVIATE_URL", "")
-WEAVIATE_API_KEY    = os.getenv("WEAVIATE_API_KEY", "")
-WEAVIATE_COLLECTION = os.getenv("WEAVIATE_COLLECTION", "Rca")
+WEAVIATE_URL        = _get("WEAVIATE_URL")
+WEAVIATE_API_KEY    = _get("WEAVIATE_API_KEY")
+WEAVIATE_COLLECTION = _get("WEAVIATE_COLLECTION") or "Rca"
 
 # ── RCA intake fields (collected before analysis triggers) ──────────────────
 REQUIRED_FAULT_FIELDS = [
