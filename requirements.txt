@@ -1,0 +1,8 @@
+streamlit
+langchain-openai
+langchain-core
+weaviate-client
+duckduckgo-search
+python-dotenv
+pypdf
+requests
